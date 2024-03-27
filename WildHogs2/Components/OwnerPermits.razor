@@ -4,8 +4,8 @@
     foreach (var permit in permits)
     {
         <div class="row">
-            <div class="col-3">@permit.Year</div>
-            <div class="col-3">@permit.Exemption</div>
+            <div class="col-1">@permit.Year</div>
+            <div class="col-2">@permit.Exemption</div>
             <div class="col-3"><button @onclick="@(()=>GetExemptionData(@permit))">View/Edit Exemption</button></div>
             <div class="col-3">Add dropdown list for "Renew", "Report Kills," "Designees," "Email Report," and "Delete" </div>
         </div>

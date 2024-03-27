@@ -2,13 +2,16 @@ using Microsoft.EntityFrameworkCore;
 
 using Radzen;
 
+using WildHogs2;
 using WildHogs2.Models;
 using WildHogs2.Repositories;
 using WildHogs2.Repositories.Promises;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var cs = new GetConnectionStrings();
 // Add services to the container.
+var bhhs = cs.GetConnectionString("WildHogs");
+builder.Services.AddDbContextFactory<WildHogsContext>(options => options.UseSqlServer(bhhs));
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddDbContextFactory<WildHogsContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));

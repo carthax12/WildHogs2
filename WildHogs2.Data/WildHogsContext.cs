@@ -1,13 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using System.Runtime.Versioning;
+
+using Microsoft.EntityFrameworkCore;
+
+using WildHogs2.Data;
 
 namespace WildHogs2.Models;
 
 public partial class WildHogsContext : DbContext
 {
-
-    private readonly IConfiguration? _config;
-
     public WildHogsContext()
     {
     }
@@ -67,11 +67,13 @@ public partial class WildHogsContext : DbContext
 
     public virtual DbSet<UsersInRole> UsersInRoles { get; set; } = default!;
 
+    [SupportedOSPlatform("windows")]
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        var db = new GetConnectionStrings();
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseSqlServer(_config.GetConnectionString("Default"));
+            optionsBuilder.UseSqlServer(db.GetConnectionString("WildHogs"));
         }
     }
 
