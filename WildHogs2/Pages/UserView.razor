@@ -1,0 +1,74 @@
+﻿@page "/userView/{id}"
+@using WildHogs2.Components
+@inject IOwnerRepository OwnerSearch
+@inject IPermitRepository PermitSearch
+
+
+<div class="row">
+    <div class="col-6 border border-dark">
+        <OwnerInfo Owner="@_owner" />
+    </div>
+    <div class="col-6 border border-dark">
+        <OwnerPermits Permits="_permits" />
+    </div>
+</div>
+<div class="row">
+    <div class="col border border-dark">
+        Display area for all editable items<br />
+        @if (_showDesignees) { <div>call &lt;ShowDesignees&gt;&lt;/ShowDesignees&gt;</div> }
+        @if (_showKillData) { <div>call &lt;ShowKillData&gt;&lt;/ShowKillData&gt;</div> }
+        @if (_showRenew) { <div>call &lt;ShowRenew&gt;&lt;/ShowRenew&gt;</div> }
+        @if (_showEmail) { <div>call &lt;ShowEmail&gt;&lt;/ShowEmail&gt;</div> }
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    private Owner _owner = new();
+    private List<Permit> _permits = new();
+    private List<Designee> _designees = new();
+    private List<ExempKillDatum> _killData = new();
+    private Permit? _currentPermit;
+
+    private bool _showDesignees;
+    private bool _showKillData;
+    private bool _showRenew;
+    private bool _showEmail;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(Id))
+        {
+            _owner = await OwnerSearch.GetById(Id);
+            _permits = await PermitSearch.GetPermitsByOwnerId(_owner.LandOwnerId);
+        }
+    }
+
+    public void GetNewExemptionNotification(Permit permit, string whatGotClicked)
+    {
+        _currentPermit = permit;
+        _showDesignees = false;
+        _showKillData = false;
+        _showRenew = false;
+        _showEmail = false;
+        switch (whatGotClicked)
+        {
+            case "designee":
+                _showDesignees = true;
+                break;
+            case "killData":
+                _showKillData = true;
+                break;
+            case "renew":
+                _showRenew = true;
+                break;
+            case "email":
+                _showEmail = true;
+                break;
+        }
+    }
+
+}

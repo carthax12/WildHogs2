@@ -1,0 +1,68 @@
+﻿@using WildHogs2.Models
+@using WildHogs2.Repositories.Promises
+@inject IOwnerRepository OwnerSearch
+
+@if (Owner.LandOwnerId > 0)
+{
+    <div class="row">
+        <div class="col-3">
+            Owner Name:
+        </div>
+        <div class="col-9">
+            @Owner.LnameL, @Owner.FnameL
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Street Address:
+        </div>
+        <div class="col-9">
+            @Owner.StreetL
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+        </div>
+        <div class="col-9">
+            @Owner.Address2L
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+           
+        </div>
+        <div class="col-9">
+            @Owner.CityL, @Owner.StateL @Owner.ZipL
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+          County 
+        </div>
+        <div class="col-9">
+            @Owner.CountyL
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+           Phone:
+        </div>
+        <div class="col-9">
+            @($"{@Owner.PhoneL:(###) ###-####}")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Business:
+        </div>
+        <div class="col-9">
+            @Owner.Business
+        </div>
+    </div>
+}
+@code {
+
+    [Parameter]
+    public Owner Owner { get; set; } = new();
+
+}

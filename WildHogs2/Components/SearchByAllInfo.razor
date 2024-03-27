@@ -1,0 +1,50 @@
+﻿@using WildHogs2.Models
+@using WildHogs2.Repositories.Promises
+@inject IOwnerRepository OwnerSearch
+@inject NavigationManager NavigationManager
+
+<div class="row">
+    <div class="col-3">Enter search term:</div>
+    <div class="col-7">
+        <RadzenTextBox Change="@(Search)"></RadzenTextBox>
+    </div>
+    <div class="col-2"><button class="btn btn-md btn-outline-success" onclick="Clear">Clear Search</button></div>
+</div>
+
+@if (_listedOwners != null)
+{
+    @foreach (var owner in _listedOwners)
+    {
+        <div class="row">
+            <div class="col">@owner.LnameL, @owner.FnameL <button onclick="@(()=>Go(@owner.LandOwnerId.ToString()))">View Data</button></div>
+        </div>
+    }
+}
+
+@code {
+    private string _searchTerm = "";
+    private IEnumerable<Owner> _owners = new List<Owner>();
+    private IEnumerable<Owner>? _listedOwners = new List<Owner>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _owners = await OwnerSearch.GetAll();
+    }
+
+    private void Search(string args)
+    {
+        _searchTerm = args;
+        _listedOwners = _owners.Where(x => x.FnameL.ToLower().Contains(_searchTerm.ToLower()) || 
+                                           x.LnameL.ToLower().Contains(_searchTerm.ToLower()));
+    }
+
+    private void Clear()
+    {
+        _listedOwners!.ToList().Clear();
+    }
+
+    private async void Go(string id)
+    {
+        NavigationManager.NavigateTo($"/userView/{id}");
+    }
+}

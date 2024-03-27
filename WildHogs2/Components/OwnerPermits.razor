@@ -1,0 +1,32 @@
+﻿@foreach (var year in Years)
+{
+    var permits = Permits.Where(x => x.Year == year);
+    foreach (var permit in permits)
+    {
+        <div class="row">
+            <div class="col-3">@permit.Year</div>
+            <div class="col-3">@permit.Exemption</div>
+            <div class="col-3"><button @onclick="@(()=>GetExemptionData(@permit))">View/Edit Exemption</button></div>
+            <div class="col-3">Add dropdown list for "Renew", "Report Kills," "Designees," "Email Report," and "Delete" </div>
+        </div>
+    }
+}
+
+@code {
+    [Parameter]
+    public List<Permit> Permits { get; set; } = new();
+
+    private List<int> Years = new();
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        Years = Permits.Select(x => x.Year.GetValueOrDefault()).Distinct().OrderBy(x => x).ToList();
+        Permits = Permits.OrderBy(x => x.Exemption).ToList();
+        StateHasChanged();
+    }
+
+    private void GetExemptionData(Permit permit)
+    {
+        // Send permit back to UserView Service
+    }
+}
